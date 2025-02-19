@@ -2,6 +2,9 @@ package kuke.board.common.snowflake;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -11,8 +14,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class SnowflakeTest {
+	private static final Logger log = LoggerFactory.getLogger(SnowflakeTest.class);
 	Snowflake snowflake = new Snowflake();
 
 	@Test
@@ -49,6 +55,14 @@ class SnowflakeTest {
 		}
 		return idList;
 	}
+
+	void getCreatedTimeStamp(Long snowflakeId){
+		long millis = (snowflakeId >> 22) + 1704067200000L;
+
+		ZonedDateTime kstDateTime = Instant.ofEpochMilli(millis).atZone(ZoneId.of("Asia/Seoul"));
+		log.info(kstDateTime.toString());
+	}
+
 
 	@Test
 	void nextIdPerformanceTest() throws InterruptedException {
